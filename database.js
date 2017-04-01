@@ -1,9 +1,10 @@
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 var url = 'mongodb://localhost:27017/test';
+
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
-  createRSVPdata(db, function() {
+    addHacker(db, "UCM", "jessie","jessie@gmail.com", "Y", function() {
     db.close();
   });
 });
@@ -11,42 +12,17 @@ MongoClient.connect(url, function(err, db) {
 
 
     
-var createRSVPdata = function(db, callback) {
-  db.createCollection("contacts", 
-	   {
-	      'validator': { '$or':
-	         [
-	            { 'name': { '$type': "string" } },
-	            { 'email': { '$regex': /@*\.com$/ } },
-	            { 'needBus': { '$checked': [ "yes", "no" ] } }
-	         ]
-	      }
-	   },	   
-    function(err, results) {
-      console.log("Collection created.");
-      callback();
-    }
-  );
-};
-
+var addHacker = function(db, startLoc, fullName, emailAddress, needBusYorN, callback) {
+    db.collection('hacker'+startLoc).insertOne({
+	'name': fullName,
+	'email': emailAddress,
+	'needBus': needBusYorN
+    })
+	console.log("name: "+fullName +" email: " +emailAddress+" need bus? : "+
+		    needBusYorN+ " added to db.");
+callback();	
 
     
-var addData = function(db, callback) {
-  db.createCollection("contacts", 
-	   {
-	      'validator': { '$or':
-	         [
-	            { 'name': { '$type': "string" } },
-	            { 'email': { '$regex': /@*\.com$/ } },
-	            { 'needBus': { '$checked': [ "yes", "no" ] } }
-	         ]
-	      }
-	   },	   
-    function(err, results) {
-      console.log("Collection created.");
-      callback();
-    }
-  );
 };
 
-db.products.insert( { item: "card", qty: 15 } )
+
