@@ -1,0 +1,24 @@
+{
+  "name": "busapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "massMailer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jenniezheng321/BusApp.git"
+  },
+  "dependencies":{
+  },
+  "engines": {
+    "node": ">=0.6.x"
+  },
+  "author": "people",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jenniezheng321/BusApp/issues"
+  },
+  "homepage": "https://github.com/jenniezheng321/BusApp#readme"
+}
