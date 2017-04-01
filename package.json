@@ -5,10 +5,11 @@
   "dependencies": {
     "async": "*",
     "email-templates": "^2.5.4",
+    "express": "^4.15.2",
     "http": "*",
+    "mongodb": "*",
     "nodemailer": "*",
-    "pug": "^2.0.0-beta11",
-    "mongodb": "*"
+    "pug": "^2.0.0-beta11"
   },
   "author": "mik, jennie, nat, henry",
   "license": "ISC"
