@@ -12,6 +12,6 @@
 }
 
 body {
-	background: url(LaHacks.png);
+	background-image: url(LaHacks.png);
 	position: center;
 }
