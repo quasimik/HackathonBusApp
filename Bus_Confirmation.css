@@ -1,0 +1,12 @@
+#nav {
+	background: lightskyblue;
+	overflow: auto;
+}
+#nav li {
+	list-style-type: none;
+	float: left;
+	padding: 10px;
+}
+#nav li:hover {
+	background: lightblue;
+}
