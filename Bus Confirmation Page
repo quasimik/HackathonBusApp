@@ -1,8 +1,13 @@
 <html>
-<head><title>LA Hacks</title></head>
+<head><title>LA Hacks Bus Confirmation</title></head>
 <header>
-<h1>Bus Confirmation Page</h1>
-<p><input type="submit" value="Confirm"></p>
-<p><input type="submit" value="Decline"></p>
+<body>
+<p>
+<font size="+2"> You have successfully confirmed</font>
+<br>
+<br> We will be sending an email with the final bus list and further information later!</br>
+</br>
+</p>
+</body>
 </header>
 </html>
