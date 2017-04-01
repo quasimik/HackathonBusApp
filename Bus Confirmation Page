@@ -1,4 +1,8 @@
 <html>
-
-
+<head><title>LA Hacks</title></head>
+<header>
+<h1>Bus Confirmation Page</h1>
+<p><input type="submit" value="Confirm"></p>
+<p><input type="submit" value="Decline"></p>
+</header>
 </html>
