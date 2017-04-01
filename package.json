@@ -10,7 +10,8 @@
     "async": "*",
     "email-templates": "^2.5.4",
     "http": "*",
-    "nodemailer": "*"
+    "nodemailer":"*",
+    "mongodb":"*"
   },
   "author": "people",
   "license": "ISC",
