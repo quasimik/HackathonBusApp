@@ -6,10 +6,10 @@
     "type": "git",
     "url": "git+https://github.com/jenniezheng321/BusApp.git"
   },
-  "dependencies":{
-  },
-  "engines": {
-    "node": ">=0.6.x"
+    "dependencies":{
+	"async":"*",
+	"http":"*",
+	"nodemailer":"*"
   },
   "author": "people",
     "license": "ISC",
