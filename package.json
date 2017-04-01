@@ -2,17 +2,13 @@
   "name": "busapp",
   "version": "1.0.0",
   "description": "",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jenniezheng321/BusApp.git"
-  },
   "dependencies": {
     "async": "*",
     "email-templates": "^2.5.4",
     "http": "*",
-    "nodemailer": "*"
+    "nodemailer": "*",
+    "pug": "^2.0.0-beta11"
   },
-  "author": "people",
-  "license": "ISC",
-  "homepage": "https://github.com/jenniezheng321/BusApp#readme"
+  "author": "mik, jennie, nat, henry",
+  "license": "ISC"
 }

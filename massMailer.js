@@ -20,6 +20,7 @@
  // Will store email whose sending is failed. 
  var failure_email = [];
  
+ var EmailTemplate = require('email-templates').EmailTemplate;
  var transporter;
  
  /* Loading modules done. */
