@@ -10,18 +10,18 @@ body
     .row
       .col-xs-9
         
-        form
+        form(action="/data" enctype="multipart/form-data" method="post")
           h1 RSVP Form
           
           .form-group
-            label(for='exampleNameInput') Full name
+            label(for='nameInput') Name
             |  
-            input#exampleNameInput.form-control(type='input', aria-describedby='nameHelp', placeholder='Enter full name')
+            input#nameInput.form-control(type='input', name='name', placeholder='Enter full name')
               
           .form-group
-            label(for='exampleInputEmail1') Email address
+            label(for='emailInput') Email address
             |  
-            input#exampleInputEmail1.form-control(type='email', aria-describedby='emailHelp', placeholder='Enter email')
+            input#emailInput.form-control(type='email', name='email', placeholder='Enter email')
             |  
             small#emailHelp.form-text.text-muted We&apos;ll never share your email with anyone else.
             
@@ -29,34 +29,31 @@ body
             legend How likely are you to need transportation?
             .form-check
               label.form-check-label
-                input#optionsRadios1.form-check-input(type='radio', name='optionsRadios', value='option1', checked='')
+                input#optionsRadios1.form-check-input(type='radio', name='sentiment', value='1', checked='')
                 |  1  Very unlikely
             .form-check
               label.form-check-label
-                input#optionsRadios2.form-check-input(type='radio', name='optionsRadios', value='option2')
+                input#optionsRadios2.form-check-input(type='radio', name='sentiment', value='2')
                 |  2
             .form-check
               label.form-check-label
-                input#optionsRadios3.form-check-input(type='radio', name='optionsRadios', value='option3')
+                input#optionsRadios3.form-check-input(type='radio', name='sentiment', value='3')
                 |  3
             .form-check
               label.form-check-label
-                input#optionsRadios3.form-check-input(type='radio', name='optionsRadios', value='option4')
+                input#optionsRadios3.form-check-input(type='radio', name='sentiment', value='4')
                 |  4
             .form-check
               label.form-check-label
-                input#optionsRadios3.form-check-input(type='radio', name='optionsRadios', value='option5')
+                input#optionsRadios3.form-check-input(type='radio', name='sentiment', value='5')
                 |  5 Very likely
           
           .form-group
-            label(for='formSelect1') Which campus do you wish to be picked up from?
-            select.form-control#formSelect1
-              option(selected='') 
-              option(value='1') USC
-              option(value='2') UCSM
-              option(value='3') UCM
-              option(value='4') UCD
-              option(value='5') UCD
-              option(value='6') UCB
+            label(for='locationInput') Which campus do you wish to be picked up from?
+            select.form-control#locationInput(name='location')
+              option(selected='') I don't need transport
+              option(value='UCLA') UCLA
+              option(value='UCSD') UCSD
+              option(value='USC') USC
           
           button.btn.btn-primary(type='submit') Submit
