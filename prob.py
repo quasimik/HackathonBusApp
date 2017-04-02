@@ -2,6 +2,8 @@
 import sys
 import matplotlib.pyplot as plt
 import urllib.request
+from tkinter import *
+
 from poibin import PoiBin
 from decimal import Decimal
 
@@ -40,13 +42,29 @@ for school in schoolNames:
    rawResults.append(result)
    totals.append(total)
 
+
 seatsProvided=[]
 for x in range (0,3):
-   print(schoolNames[x], "has ", totals[x],"students asking for transportation.")
-   print("How many transportation spots will you provide at "+schoolNames[x]+"?");
+   ques=schoolNames[x]+ " has "+str(totals[x])+" students asking for transportation.\n"\
+         +"How many transportation spots will you provide at "+schoolNames[x]+"?"
+   print(ques)
    answer=input()
    seatsProvided.append(answer)
+"""
+for x in range (0,3):
+   ques=schoolNames[x]+ " has "+str(totals[x])+" students asking for transportation.\n"\
+         +"How many transportation spots will you provide at "+schoolNames[x]+"?"
+   top = Tk()
+   text = Text()
    
+   text.insert(INSERT, ques)
+   text.pack()
+   # Code to add widgets will go here...
+   top.mainloop()
+
+   answer=input()
+   seatsProvided.append(answer)
+""" 
 for x in range (0,3):
    fig = plt.figure() 
    fig.canvas.set_window_title('Bus Boss')
