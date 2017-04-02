@@ -5,6 +5,8 @@ import urllib.request
 from poibin import PoiBin
 from decimal import Decimal
 
+totals=[]
+rawResults=[]
 databaseName="http://localhost:3000/data"
 schoolNames=['UCLA', 'USC', 'UCSD']
 for school in schoolNames:
@@ -35,11 +37,24 @@ for school in schoolNames:
       x+=1
    pb = PoiBin(arr)
    result=pb.cdf(range(0, total))
-   print(result)
+   rawResults.append(result)
+   totals.append(total)
 
-   plt.plot(range(0,total),result)
-   plt.title(school)
-   plt.ylabel('precent chance that all students who want seats do get seats')
-   plt.xlabel('number of seats available')
+seatsProvided=[]
+for x in range (0,3):
+   print(schoolNames[x], "has ", totals[x],"students asking for transportation.")
+   print("How many transportation spots will you provide at "+schoolNames[x]+"?");
+   answer=input()
+   seatsProvided.append(answer)
+   
+for x in range (0,3):
+   fig = plt.figure() 
+   fig.canvas.set_window_title('Bus Boss')
+   plt.plot(range(0,totals[x]),rawResults[x])
+   chance=rawResults[x][int(seatsProvided[x])]
+   plt.plot([0, seatsProvided[x]],[chance,chance])
+   plt.title(schoolNames[x])
+   plt.ylabel('% Change that All Students Get Seats')
+   plt.xlabel('Number of Seats Available')
    plt.show()
 
