@@ -60,47 +60,47 @@ app.get("/form", function(req, res){
 
 // app.get("/data", dataController.getData);
 
-app.get("/data", function(req, res) {
-  
-  var sentimentFilter = Number(req.query.sentiment);
-  var locationFilter = req.query.location;
-  var wentFilter = req.query.went;
-  
-  if (typeof sentimentFilter === 'undefined' &&
-      typeof locationFilter === 'undefined' &&
-      typeof wentFilter === 'undefined') {
-    Busser.find(function (err, bussers) {
-      if (err) return console.error(err);
-      res.send(bussers);
-    });
-  }
-  else {
-    var filter = {};
-    if (typeof sentimentFilter !== 'undefined') {
-      filter.likelihood = sentimentFilter;
-    }
-    if (typeof locationFilter !== 'undefined') {
-      filter.location = locationFilter;
-    }
-    if (typeof wentFilter !== 'undefined') {
-      filter.went = wentFilter;
-    }
-    Busser.count({filter}, function (err, count) {
-      if (err) return console.error(err);
-      res.send(String(count));
-    });
-  }
-  
-});
-
 // app.get("/data", function(req, res) {
   
-//   Busser.find(function (err, bussers) {
-//     if (err) return console.error(err);
-//     res.send(bussers);
-//   });
+//   var sentimentFilter = Number(req.query.sentiment);
+//   var locationFilter = req.query.location;
+//   var wentFilter = req.query.went;
+  
+//   if (typeof sentimentFilter === 'undefined' &&
+//       typeof locationFilter === 'undefined' &&
+//       typeof wentFilter === 'undefined') {
+//     Busser.find(function (err, bussers) {
+//       if (err) return console.error(err);
+//       res.send(bussers);
+//     });
+//   }
+//   else {
+//     var filter = {};
+//     if (typeof sentimentFilter !== 'undefined') {
+//       filter.likelihood = sentimentFilter;
+//     }
+//     if (typeof locationFilter !== 'undefined') {
+//       filter.location = locationFilter;
+//     }
+//     if (typeof wentFilter !== 'undefined') {
+//       filter.went = wentFilter;
+//     }
+//     Busser.count({filter}, function (err, count) {
+//       if (err) return console.error(err);
+//       res.send(String(count));
+//     });
+//   }
   
 // });
+
+app.get("/data", function(req, res) {
+  
+  Busser.find(function (err, bussers) {
+    if (err) return console.error(err);
+    res.send(bussers);
+  });
+  
+});
 
 app.post("/data", function(req, res){
   
@@ -158,6 +158,7 @@ app.delete("/data", function(req, res) {
     });
   }
   console.log('done gen');
+  res.send("done");
 });
 
 app.get("/data-delete", function(req, res) {
@@ -182,6 +183,7 @@ app.get("/data-delete", function(req, res) {
     });
   }
   console.log('done gen');
+  res.send("done");
 });
 
 app.listen(3000);
