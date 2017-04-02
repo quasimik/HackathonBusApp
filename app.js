@@ -29,7 +29,8 @@ var busserSchema = new Schema({
   email: String,
   recency: Number,
   likelihood: Number,
-  location: String
+  location: String,
+  went: Boolean
 });
 var Busser = mongoose.model("Busser", busserSchema);
 
@@ -58,24 +59,48 @@ app.get("/form", function(req, res){
 // });
 
 // app.get("/data", dataController.getData);
+
 app.get("/data", function(req, res) {
   
-  var sentiment = Number(req.query.s);
+  var sentimentFilter = Number(req.query.sentiment);
+  var locationFilter = req.query.location;
+  var wentFilter = req.query.went;
   
-  if (isNaN(sentiment)) {
+  if (typeof sentimentFilter === 'undefined' &&
+      typeof locationFilter === 'undefined' &&
+      typeof wentFilter === 'undefined') {
     Busser.find(function (err, bussers) {
       if (err) return console.error(err);
       res.send(bussers);
     });
   }
   else {
-    Busser.count({likelihood: sentiment}, function (err, count) {
+    var filter = {};
+    if (typeof sentimentFilter !== 'undefined') {
+      filter.likelihood = sentimentFilter;
+    }
+    if (typeof locationFilter !== 'undefined') {
+      filter.location = locationFilter;
+    }
+    if (typeof wentFilter !== 'undefined') {
+      filter.went = wentFilter;
+    }
+    Busser.count({filter}, function (err, count) {
       if (err) return console.error(err);
       res.send(String(count));
     });
   }
   
 });
+
+// app.get("/data", function(req, res) {
+  
+//   Busser.find(function (err, bussers) {
+//     if (err) return console.error(err);
+//     res.send(bussers);
+//   });
+  
+// });
 
 app.post("/data", function(req, res){
   
@@ -122,9 +147,34 @@ app.delete("/data", function(req, res) {
     var newBusser = new Busser({
       name: "NameSon McNameName",
       email: "email@lol.kek",
-      recency: Math.floor(Math.random() * 3),
-      likelihood: Math.floor(Math.random() * 5),
-      location: locations[Math.floor(Math.random() * locations.length)]
+      recency: Math.floor(Math.random() * 3) + 1, // 1-3
+      likelihood: Math.floor(Math.random() * 5) + 1, // 1-5
+      location: locations[Math.floor(Math.random() * locations.length)],
+      went: Math.floor(Math.random() * 2)
+    });
+    
+    newBusser.save(function (err) {
+      if (err) return console.log(err);
+    });
+  }
+  console.log('done gen');
+});
+
+app.get("/data-delete", function(req, res) {
+  Busser.remove({}, function(err) { 
+    console.log('collection removed');
+  });
+  
+  var locations = [ "UCLA", "UCSD", "USC" ];
+  
+  for (i = 0; i < 140; i++) {
+    var newBusser = new Busser({
+      name: "NameSon McNameName",
+      email: "email@lol.kek",
+      recency: Math.floor(Math.random() * 3) + 1, // 1-3
+      likelihood: Math.floor(Math.random() * 5) + 1, // 1-5
+      location: locations[Math.floor(Math.random() * locations.length)],
+      went: Math.floor(Math.random() * 2)
     });
     
     newBusser.save(function (err) {
