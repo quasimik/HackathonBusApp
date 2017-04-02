@@ -7,7 +7,7 @@ percentages, counts = sys.argv[2::2], sys.argv[1::2]
 percentages=list(map(float,percentages))
 counts=list(map(int,counts))
 
-print("Type count then percentage for each sentiment")
+#print("Type count then percentage for each sentiment")
 arr=[]
 total=0
 x=0
@@ -20,12 +20,15 @@ while (x < len(counts)):
        i+=1
    x+=1
 
+#print(arr)
 pb = PoiBin(arr)
 result=pb.cdf(range(0, total))
 print(result)
-import matplotlib.pyplot as plt
 
+"""
+import matplotlib.pyplot as plt
 plt.plot(range(0,total),result)
 plt.ylabel('precent chance that all students who wanted seats do get seats')
 plt.xlabel('number of seats available')
 plt.show()
+"""
