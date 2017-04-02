@@ -7,6 +7,9 @@ from tkinter import *
 from poibin import PoiBin
 from decimal import Decimal
 
+def multiply(x):
+   return float(int(x*10000))/100
+
 if(len(sys.argv)==1):
    totals=[]
    rawResults=[]
@@ -40,6 +43,8 @@ if(len(sys.argv)==1):
          x+=1
       pb = PoiBin(arr)
       result=pb.cdf(range(0, total))
+      result=list(map(multiply,result))
+      result.append(100)
       rawResults.append(result)
       totals.append(total)
 
@@ -49,13 +54,17 @@ if(len(sys.argv)==1):
       ques="\n"+schoolNames[x]+ " has "+str(totals[x])+" students asking for transportation.\n"\
             +"How many transportation spots will you provide at "+schoolNames[x]+"? "
       print(ques,end="")
-      answer=input()
-      seatsProvided.append(answer)
+      answer=int(input())
+      if(answer<0):
+         answer=0
+      if (answer>totals[x]):
+         answer=totals[x]
+      seatsProvided.append(str(answer))
 
    print("")
-   line="\n\t\tTotal\tProvided\t\t%\n"
+   line="\n\t\tTotal\tProvided\tChance\n"
    for x in range (0,3):
-      line+="\t"+schoolNames[x]+ "\t"+str(totals[x])+"\t"+str(seatsProvided[x])+"\t"+str(int(seatsProvided[x])/totals[x])+'\n'
+      line+="\t"+schoolNames[x]+ "\t"+str(totals[x])+"\t"+str(seatsProvided[x])+"\t"+str(rawResults[x][int(seatsProvided[x])])+'\n'
       
    top = Tk()
    top.wm_title("Dashboard")
@@ -67,77 +76,14 @@ if(len(sys.argv)==1):
    for x in range (0,3):
       fig = plt.figure() 
       fig.canvas.set_window_title('Bus Boss')
-      plt.plot(range(0,totals[x]),rawResults[x])
+      plt.plot(range(0,totals[x]+1),rawResults[x])
       chance=rawResults[x][int(seatsProvided[x])]
       plt.plot([0, seatsProvided[x]],[chance,chance])
+      plt.plot([seatsProvided[x], seatsProvided[x]],[0,chance])
       plt.title(schoolNames[x])
-      plt.ylabel('% Chance that All Students Get Seats')
+      plt.ylabel('Chance that All Students Get Seats')
       plt.xlabel('Number of Seats Available')
+      ax=plt.gca()
+      ax.set_xbound([0,totals[x]])
+      ax.set_ybound([0,100])
       plt.show()
-
-if (len(sys.argv)==2):
-
-   databaseName="http://localhost:3000/data"
-   totals=0
-   rawResults=[]
-   x=str(sys.argv[1])
-   
-   counts=[]
-   y=1
-   while (y<=5):
-      counts.append(urllib.request.urlopen(databaseName+"?sentiment="+str(y)+"&location="+x).read())
-      y+=1
-   counts=list(map(int,counts))
-   percentages=[]
-   y=1
-   while (y<=5):
-      went=urllib.request.urlopen(databaseName+"?sentiment="+str(y)+"&location="+x+"&went=true").read()
-      total=urllib.request.urlopen(databaseName+"?sentiment="+str(y)+"&location="+x).read()
-      percentages.append(float(went)/float(total))
-      y+=1
-
-   arr=[]
-   total=0
-   y=0
-   i=0
-   while (y < len(counts)):
-      i=0
-      total+=counts[y]
-      while (i < counts[y]):
-         arr.append(percentages[y])
-         i+=1
-      y+=1
-   pb = PoiBin(arr)
-   result=pb.cdf(range(0, total))
-   rawResults=result
-   totals=total
-
-
-   seatsProvided=0
-
-   ques="\n"+x+ " has "+str(totals)+" students asking for transportation.\n"\
-         +"How many transportation spots will you provide at "+x+"? "
-   print(ques,end="")
-   answer=input()
-   seatsProvided=answer
-   print("")
-
-   line="\n\t\tTotal\tProvided\t\t%\n"
-   line+="\t"+x+ "\t"+str(totals)+"\t"+str(seatsProvided)+"\t"+str(int(seatsProvided)/totals)+'\n'
-      
-   top = Tk()
-   top.wm_title("Dashboard")
-   text = Text()
-   text.insert(INSERT, line)
-   text.pack()
-   top.mainloop()
-      
-   fig = plt.figure() 
-   fig.canvas.set_window_title('Bus Boss')
-   plt.plot(range(0,totals),rawResults)
-   chance=rawResults[int(seatsProvided)]
-   plt.plot([0, seatsProvided],[chance,chance])
-   plt.title(x)
-   plt.ylabel('% Chance that All Students Get Seats')
-   plt.xlabel('Number of Seats Available')
-   plt.show()
