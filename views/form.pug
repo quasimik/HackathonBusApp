@@ -1,48 +1,62 @@
-container
-  row
-    col-xs-9
-      form
-        .form-group
-          label(for='Full Name') Full name
-          |  
-          input#exampleNameInput.form-control(type='input', aria-describedby='nameHelp', placeholder='Enter full name')
-        .form-group
-          label(for='exampleInputEmail1') Email address
-          |  
-          input#exampleInputEmail1.form-control(type='email', aria-describedby='emailHelp', placeholder='Enter email')
-          |  
-          small#emailHelp.form-text.text-muted We&apos;ll never share your email with anyone else.
-        fieldset.form-group
-          legend Radio buttons
-          .form-check
-            label.form-check-label
-              input#optionsRadios1.form-check-input(type='radio', name='optionsRadios', value='option1', checked='')
-              |  Option one
-          .form-check
-            label.form-check-label
-              input#optionsRadios2.form-check-input(type='radio', name='optionsRadios', value='option2')
-              |  Option two
-          .form-check.disabled
-            label.form-check-label
-              input#optionsRadios3.form-check-input(type='radio', name='optionsRadios', value='option3')
-              |  Option three
-          .form-check.disabled
-            label.form-check-label
-              input#optionsRadios3.form-check-input(type='radio', name='optionsRadios', value='option4')
-              |  Option four
-          .form-check.disabled
-            label.form-check-label
-              input#optionsRadios3.form-check-input(type='radio', name='optionsRadios', value='option5')
-              |  Option five
-        |  
-        select.custom-select
-          option(selected='') Which campus do you wish to be picked up from?
-          option(value='1') USC
-          option(value='2') UCSM
-          option(value='3') UCM
-          option(value='4') UCD
-          option(value='5') UCD
-          option(value='6') UCB
-        h1
-        |  
-        button.btn.btn-primary(type='submit') Submit
+doctype html
+
+head
+  meta(charset='utf-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  link(rel='stylesheet', href='css/bootstrap.min.css')
+
+body
+  .container
+    .row
+      .col-xs-9
+        
+        form
+          h1 RSVP Form
+          
+          .form-group
+            label(for='exampleNameInput') Full name
+            |  
+            input#exampleNameInput.form-control(type='input', aria-describedby='nameHelp', placeholder='Enter full name')
+              
+          .form-group
+            label(for='exampleInputEmail1') Email address
+            |  
+            input#exampleInputEmail1.form-control(type='email', aria-describedby='emailHelp', placeholder='Enter email')
+            |  
+            small#emailHelp.form-text.text-muted We&apos;ll never share your email with anyone else.
+            
+          fieldset.form-group
+            legend How likely are you to need transportation?
+            .form-check
+              label.form-check-label
+                input#optionsRadios1.form-check-input(type='radio', name='optionsRadios', value='option1', checked='')
+                |  1  Very unlikely
+            .form-check
+              label.form-check-label
+                input#optionsRadios2.form-check-input(type='radio', name='optionsRadios', value='option2')
+                |  2
+            .form-check
+              label.form-check-label
+                input#optionsRadios3.form-check-input(type='radio', name='optionsRadios', value='option3')
+                |  3
+            .form-check
+              label.form-check-label
+                input#optionsRadios3.form-check-input(type='radio', name='optionsRadios', value='option4')
+                |  4
+            .form-check
+              label.form-check-label
+                input#optionsRadios3.form-check-input(type='radio', name='optionsRadios', value='option5')
+                |  5 Very likely
+          
+          .form-group
+            label(for='formSelect1') Which campus do you wish to be picked up from?
+            select.form-control#formSelect1
+              option(selected='') 
+              option(value='1') USC
+              option(value='2') UCSM
+              option(value='3') UCM
+              option(value='4') UCD
+              option(value='5') UCD
+              option(value='6') UCB
+          
+          button.btn.btn-primary(type='submit') Submit

@@ -1,11 +1,16 @@
-var app = require("express")();
+var express = require("express");
+var app = express();
+
+// Requires
 var util = require("util");
 var multiparty = require("multiparty");
-
-app.set("view engine", "pug");
-
+var path = require("path");
 var bodyParser = require("body-parser");
+
+// Uses
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
+app.set("view engine", "pug");
 
 // Mongoose
 var mongoose = require("mongoose");
