@@ -1,6 +1,8 @@
 var express = require("express");
 var app= express();
 
+app.set("view engine", "pug");
+
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
@@ -29,6 +31,10 @@ var dataController = require("./dataController");
 // HTTP Methods
 app.get("/", function(req, res){
   res.end("Hello World");
+});
+
+app.get("/form", function(req, res){
+  res.render("form");
 });
 
 app.get("/data", dataController.getData);
