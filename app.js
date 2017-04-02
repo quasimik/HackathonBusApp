@@ -1,5 +1,6 @@
-var express = require("express");
-var app= express();
+var app = require("express")();
+var util = require("util");
+var multiparty = require("multiparty");
 
 app.set("view engine", "pug");
 
@@ -37,35 +38,59 @@ app.get("/form", function(req, res){
   res.render("form");
 });
 
+// app.post("/form", function(req, res){
+//   var form = new multiparty.Form();
+
+//   form.parse(req, function(err, fields) {
+//     res.writeHead(200, {'content-type': 'text/plain'});
+//     res.write('received upload:\n\n');
+//     res.end(util.inspect({fields: fields}));
+    
+//   });
+  
+// });
+
 app.get("/data", dataController.getData);
 
 app.post("/data", function(req, res){
   
-  
-  var newEmail = req.body.busser.email;
-  var newRecency = req.body.busser.recency;
-  var newLikelihood = req.body.busser.likelihood;
-  
-  var newBusser = new Busser({
-    email: newEmail,
-    recency: newRecency,
-    likelihood: newLikelihood
+  var form = new multiparty.Form();
+  // var email = req.body.busser.email;
+  // var recency = req.body.busser.recency;
+  // var likelihood = req.body.busser.likelihood;
+  form.parse(req, function(err, fields) {
+    
+    var newBusser = new Busser({
+      email: fields.email,
+      recency: Number(fields.recency),
+      likelihood: Number(fields.likelihood)
+    });
+    
+    newBusser.save(function (err) {
+      console.log(err);
+      if (err) return console.log(err);
+      
+      // saved!
+      console.log("saved new busser: " + fields.recency);
+      // var bussers;
+      Busser.find(function (err, bussers) {
+        if (err) return console.error(err);
+        res.send(bussers);
+      });
+    });
   });
   
-  newBusser.save(function (err) {
-    if (err) return handleError(err);
-    
-    // saved!
-    console.log("saved new busser: " + newEmail);
-    // var bussers;
-    Busser.find(function (err, bussers) {
-      if (err) return console.error(err);
-      res.send(bussers);
-    });
-  })
+  
+  
 });
+
 // app.patch("/data", dataController.patchData);
-// app.delete("/data", dataController.deleteData);
+
+app.delete("/data", function(req, res){
+  Busser.remove({}, function(err) { 
+    console.log('collection removed') ;
+  });
+});
 
 app.listen(3000);
 console.log("running...");
