@@ -25,9 +25,11 @@ db.once('open', function() {
 // Mongoose Schema for busser
 var Schema = mongoose.Schema;
 var busserSchema = new Schema({
+  name: String,
   email: String,
   recency: Number,
-  likelihood: Number
+  likelihood: Number,
+  location: String
 });
 var Busser = mongoose.model("Busser", busserSchema);
 
@@ -55,7 +57,25 @@ app.get("/form", function(req, res){
   
 // });
 
-app.get("/data", dataController.getData);
+// app.get("/data", dataController.getData);
+app.get("/data", function(req, res) {
+  
+  var sentiment = Number(req.query.s);
+  
+  if (isNaN(sentiment)) {
+    Busser.find(function (err, bussers) {
+      if (err) return console.error(err);
+      res.send(bussers);
+    });
+  }
+  else {
+    Busser.count({likelihood: sentiment}, function (err, count) {
+      if (err) return console.error(err);
+      res.send(String(count));
+    });
+  }
+  
+});
 
 app.post("/data", function(req, res){
   
@@ -91,10 +111,27 @@ app.post("/data", function(req, res){
 
 // app.patch("/data", dataController.patchData);
 
-app.delete("/data", function(req, res){
+app.delete("/data", function(req, res) {
   Busser.remove({}, function(err) { 
-    console.log('collection removed') ;
+    console.log('collection removed');
   });
+  
+  var locations = [ "UCLA", "UCSD", "USC" ];
+  
+  for (i = 0; i < 140; i++) {
+    var newBusser = new Busser({
+      name: "NameSon McNameName",
+      email: "email@lol.kek",
+      recency: Math.floor(Math.random() * 3),
+      likelihood: Math.floor(Math.random() * 5),
+      location: locations[Math.floor(Math.random() * locations.length)]
+    });
+    
+    newBusser.save(function (err) {
+      if (err) return console.log(err);
+    });
+  }
+  console.log('done gen');
 });
 
 app.listen(3000);
