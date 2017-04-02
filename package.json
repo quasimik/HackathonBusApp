@@ -2,6 +2,9 @@
   "name": "busapp",
   "version": "1.0.0",
   "description": "",
+  "scripts": {
+    "start": "node ./app.js"
+  },
   "dependencies": {
     "async": "*",
     "email-templates": "^2.5.4",
@@ -11,6 +14,20 @@
     "nodemailer": "*",
     "pug": "^2.0.0-beta11"
   },
-  "author": "mik, jennie, nat, henry",
+  "author": "Contributors",
+  "contributors": [
+    {
+      "name": "Michael Liu"
+    },
+    {
+      "name": "Jennie Zheng"
+    },
+    {
+      "name": "Henry Bui"
+    },
+    {
+      "name": "Nathanael See"
+    }
+  ],
   "license": "ISC"
 }
