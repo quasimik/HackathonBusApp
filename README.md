@@ -16,7 +16,7 @@ Do you run the risk of having an empty bus?
 By getting a more quantized idea of how likely people are to turn up, you can get a better idea of how many seats and how many buses you should book for different locations.
 BusBoss aims to help calculate an expected value of bussers, based on their RSVP info.
 
-##How?
+## How?
 
 When RSVPing, get applicants to indicate how likely they are to use the provided bus, on a scale of 1 to 5.
 Using a [Poisson Binomial distribution](https://en.wikipedia.org/wiki/Poisson_binomial_distribution), we can graph the cumulative probability curve to indicate the likelihood that x or less people will show up on the day itself. 
