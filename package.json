@@ -11,6 +11,7 @@
     "express": "^4.15.2",
     "http": "*",
     "mongodb": "*",
+    "mongoose": "^4.9.2",
     "nodemailer": "*",
     "pug": "^2.0.0-beta11"
   },
