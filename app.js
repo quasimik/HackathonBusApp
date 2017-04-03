@@ -8,7 +8,7 @@ var multiparty = require("multiparty");
 var path = require("path");
 var bodyParser = require("body-parser");
 var createNormalDist = require("distributions-normal");
-var async = require("async");
+// var plotly = require('plotly')('quasimik', '9scX2RcM9VdobanvIyI3');
 
 // Uses
 app.use(express.static(path.join(__dirname, 'public')));
@@ -70,26 +70,19 @@ app.get("/graph", function(req, res) {
           busserDist.mean(mean_sum);
           busserDist.variance(variance_sum);
           
-          var trace2 = {
-            x: [2, 3, 4, 5],
-            y: [16, 5, 11, 9],
-            mode: 'lines'
-          };
-          
-          var data = [ trace2 ];
+          // var data = [{x:[0,1,2], y:[3,2,1], type: 'bar'}];
+          // var layout = {fileopt : "overwrite", filename : "simple-node-example"};
 
-          var layout = {
-            title:'Line and Scatter Plot'
-          };
+          // plotly.plot(data, layout, function (err, msg) {
+          //   if (err) return console.log(err);
+          //   console.log(msg);
+          // });
 
-          Plotly.newPlot('graphDiv', data, layout);
-          
-          res.render("form");
         }
       });
     });
   }
-  
+  res.render("graph");
   
   // var count = 0
   // async.whilst(
