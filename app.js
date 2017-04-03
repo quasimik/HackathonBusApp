@@ -1,3 +1,4 @@
+// Express
 var express = require("express");
 var app = express();
 
@@ -6,6 +7,8 @@ var util = require("util");
 var multiparty = require("multiparty");
 var path = require("path");
 var bodyParser = require("body-parser");
+var createNormalDist = require("distributions-normal");
+var async = require("async");
 
 // Uses
 app.use(express.static(path.join(__dirname, 'public')));
@@ -40,6 +43,113 @@ var dataController = require("./dataController");
 // HTTP Methods
 app.get("/", function(req, res){
   res.end("Hello World");
+});
+
+app.get("/graph", function(req, res) {
+  // Statistics and plotting
+  
+  // Normal dist parameters
+  var busserDist = createNormalDist();
+  var mean_sum = 0;
+  var variance_sum = 0;
+  
+  var count = 0;
+  for (var i = 0; i < 5; i++) {
+    Busser.count({location: "UCLA", sentiment: i}, function(err, n) {
+      if (err) return console.error(err);
+      if (n === 0) return;
+      
+      Busser.count({location: "UCLA", sentiment: i, went: 1}, function(err, n_success) {
+        if (err) return console.error(err);
+        
+        var p = n_success / n;
+        mean_sum += n * p;
+        variance_sum += n * p * (1 - p);
+        
+        if (i >= 5) {
+          busserDist.mean(mean_sum);
+          busserDist.variance(variance_sum);
+          
+          var trace2 = {
+            x: [2, 3, 4, 5],
+            y: [16, 5, 11, 9],
+            mode: 'lines'
+          };
+          
+          var data = [ trace2 ];
+
+          var layout = {
+            title:'Line and Scatter Plot'
+          };
+
+          Plotly.newPlot('graphDiv', data, layout);
+          
+          res.render("form");
+        }
+      });
+    });
+  }
+  
+  
+  // var count = 0
+  // async.whilst(
+  //   function() { console.log("count: " + count); return count < 5; },
+  //   function() {
+  //     count++;
+  //     async.series([
+        
+  //     ],
+  //     function(err, results) {
+        
+  //     });
+  //   },
+  //   function(err, n) {
+  //     console.log("mean_sum");
+      
+  //     busserDist.mean(mean_sum);
+  //     busserDist.variance(variance_sum);
+      
+  //     res.end();
+  //   }
+  // );
+  
+  // async.series([
+    
+  //   function() {
+  //     // Approximate normal distribution for each sentiment
+  //     // Combine (convolute) all sentiments' distributions
+  //     for (var i = 1; i <= 5; i++) {
+  //       console.log("a");
+  //       Busser.count({location: "UCLA", sentiment: i}, function(err, n) {
+  //         if (err) return console.error(err);
+  //         if (n === 0) return;
+          
+  //         Busser.count({location: "UCLA", sentiment: i, went: 1}, function(err, n_success) {
+  //           if (err) return console.error(err);
+            
+  //           var p = n_success / n;
+  //           console.log(i + " p " + p);
+  //           mean_sum += n * p;
+  //           console.log(i + " 1");
+  //           variance_sum += n * p * (1 - p);
+  //           console.log(i + " 2");
+  //         });
+  //         console.log(i + " 3");
+          
+  //       })
+  //     }
+  //   },
+    
+  //   function() {
+  //     // Use async to make sure this runs after db calls
+  //     // Combined normal distribution
+  //     console.log("mean_sum");
+      
+  //     busserDist.mean(mean_sum);
+  //     busserDist.variance(variance_sum);
+  //   }
+    
+  // ]); // ! async
 });
 
 app.get("/form", function(req, res){
@@ -119,8 +229,8 @@ app.post("/data", function(req, res){
 app.get("/data-delete", function(req, res) {
   Busser.remove({}, function(err) { 
     console.log('deleted');
+    res.send("deleted");
   });
-  res.send("deleted");
 });
 
 app.get("/data-gen", function(req, res) {
@@ -146,10 +256,6 @@ app.get("/data-gen", function(req, res) {
   }
   console.log('generated');
   res.send("done");
-});
-
-app.get("/graph", function(req, res) {
-  
 });
 
 app.listen(3000);

@@ -2,12 +2,17 @@
   "name": "busapp",
   "version": "1.0.0",
   "description": "improve hackthon bus provision",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/quasimik/BusBoss.git"
+  },
   "scripts": {
     "start": "node ./app.js"
   },
   "dependencies": {
-    "async": "*",
+    "async": "^2.3.0",
     "body-parser": "^1.17.1",
+    "distributions-normal": "^2.0.2",
     "email-templates": "^2.5.4",
     "express": "^4.15.2",
     "http": "*",
@@ -16,6 +21,9 @@
     "multiparty": "^4.1.3",
     "nodemailer": "*",
     "pug": "^2.0.0-beta11",
+    "react": "^0.14.8",
+    "react-dom": "^0.14.8",
+    "rumble-charts": "^1.1.1",
     "util": "^0.10.3"
   },
   "author": "Contributors",
