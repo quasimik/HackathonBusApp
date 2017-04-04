@@ -14,10 +14,14 @@ BusBoss takes the attendees' RSVP info and applies simple statistical analysis t
 
 ## How?
 
-When RSVPing for the hackathon, get the attendees to indicate how likely they are to need transport, on a scale of 1 to 5. This option should be independent of their chances of getting in (and make sure you mention this in your RSVP form), so the response should be honest. Also, try to think of other ways to get an honest response from the attendees.
+In the hackathon RSVP form, get the attendees to indicate how likely they are to need transport, on a scale of 1 to 5. This option should be independent of their chances of getting in (and make sure you mention this in your RSVP form), so the response should be honest. Also, try to think of other ways to get an honest response from the attendees.
+
 BusBoss then takes these "_sentiment_" values from past hackathons and calculates the percentage chances of people in each sentiment bracket actually needing transport.
+
 If this is your first time running BusBoss, then you can input your own sentiment percentage values, and use actual data-based values from your next hackathon onwards.
+
 BusBoss generates a binomial distribution of actual transport spots needed for each sentiment bracket. Then, BusBoss [approximates a normal distribution](https://en.wikipedia.org/wiki/Binomial_distribution#Normal_approximation) using these binomial distributions (you do have many people attending, right?). Then, it adds the normal distributions together to generate an overall normal distribution. BusBoss then plots the cumulative distribution function of this normal distribution, giving you a better idea of how many people actually need transport.
+
 With BusBoss, you can quickly get the answer to questions like: "_Given that 50 people asked for transport, how likely is it that only 30 people actually need transport?_". BusBoss provides a concrete percentage answer (e.g. 95%) to such questions.
 
 ## Usage
