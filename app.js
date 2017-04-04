@@ -111,7 +111,7 @@ app.get("/graph/:location", function(req, res) {
     var cdf_plot = { x: [], y: [], type: "scatter" };
     for (var i = 0; i < n_total + 1; i++) {
       cdf_plot.x[i] = i;
-      cdf_plot.y[i] = cdf(i);
+      cdf_plot.y[i] = cdf(i) * 100;
     }
     console.log(util.inspect(cdf_plot));
     
