@@ -1,15 +1,6 @@
 var Plotly = require("plotly.js");
+var cdf_plot_o = JSON.parse(cdf_plot_str);
 
-var trace1 = {
-  x: [1, 2, 3, 4], 
-  y: [10, 15, 13, 17], 
-  type: 'scatter'
-};
-var trace2 = {
-  x: [1, 2, 3, 4], 
-  y: [16, 5, 11, 9], 
-  type: 'scatter'
-};
-var data = [trace1, trace2];
+var data = [cdf_plot_o];
 
-Plotly.newPlot('myDiv', data);
+Plotly.newPlot('graphDiv', data);

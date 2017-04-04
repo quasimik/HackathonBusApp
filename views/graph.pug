@@ -2,5 +2,7 @@ head
   //- Plotly.js
 
 body
-  #myDiv(style="width: 480px; height: 400px;")
-  script(src="js/graph.bundle.js")
+  #graphDiv(style="width: 100%; height: 100%;")
+  script.
+    var cdf_plot_str = !{JSON.stringify(cdf_plot)};
+  script(src="/js/graph.bundle.js")

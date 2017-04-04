@@ -8,7 +8,7 @@ var multiparty = require("multiparty");
 var path = require("path");
 var bodyParser = require("body-parser");
 var createNormalDist = require("distributions-normal");
-// var plotly = require('plotly')('quasimik', '9scX2RcM9VdobanvIyI3');
+var async = require("async");
 
 // Uses
 app.use(express.static(path.join(__dirname, 'public')));
@@ -45,104 +45,79 @@ app.get("/", function(req, res){
   res.end("Hello World");
 });
 
-app.get("/graph", function(req, res) {
-  // Statistics and plotting
+app.get("/graph/:location", function(req, res) {
   
-  // Normal dist parameters
-  var busserDist = createNormalDist();
-  var mean_sum = 0;
-  var variance_sum = 0;
+  var location = req.params.location;
+  // var location = "UCLA";
+  var sen_total = [];
+  var sen_went = [];
   
-  var count = 0;
-  for (var i = 0; i < 5; i++) {
-    Busser.count({location: "UCLA", sentiment: i}, function(err, n) {
-      if (err) return console.error(err);
-      if (n === 0) return;
+  // Construct asynchoronous Mongoose call stack
+  var calls = [];
+  [1, 2, 3, 4, 5].forEach(function(sen) {
+    calls.push(function(callback) {
       
-      Busser.count({location: "UCLA", sentiment: i, went: 1}, function(err, n_success) {
-        if (err) return console.error(err);
-        
-        var p = n_success / n;
-        mean_sum += n * p;
-        variance_sum += n * p * (1 - p);
-        
-        if (i >= 5) {
-          busserDist.mean(mean_sum);
-          busserDist.variance(variance_sum);
-          
-          // var data = [{x:[0,1,2], y:[3,2,1], type: 'bar'}];
-          // var layout = {fileopt : "overwrite", filename : "simple-node-example"};
-
-          // plotly.plot(data, layout, function (err, msg) {
-          //   if (err) return console.log(err);
-          //   console.log(msg);
-          // });
-
-        }
+      // count total for this sentiment bracket
+      Busser.count({location: location, sentiment: sen}, function(err, result) {
+        if (err) return callback(err);
+        console.log("total[" + sen + "]: " + result);
+        sen_total[sen] = result;
+        callback(null);
       });
+      
     });
-  }
-  res.render("graph");
+    calls.push(function(callback) {
+      
+      // count went for this sentiment bracket
+      Busser.count({location: location, sentiment: sen, went: 1}, function(err, result) {
+        if (err) return callback(err);
+        console.log("went[" + sen + "]: " + result);
+        sen_went[sen] = result;
+        callback(null);
+      });
+      
+    });
+  });
   
-  // var count = 0
-  // async.whilst(
-  //   function() { console.log("count: " + count); return count < 5; },
-  //   function() {
-  //     count++;
-  //     async.series([
-        
-  //     ],
-  //     function(err, results) {
-        
-  //     });
-  //   },
-  //   function(err, n) {
-  //     console.log("mean_sum");
-      
-  //     busserDist.mean(mean_sum);
-  //     busserDist.variance(variance_sum);
-      
-  //     res.end();
-  //   }
-  // );
-  
-  // async.series([
+  // Run call stack in parallel
+  async.parallel(calls, function(err) {
     
-  //   function() {
-  //     // Approximate normal distribution for each sentiment
-  //     // Combine (convolute) all sentiments' distributions
-  //     for (var i = 1; i <= 5; i++) {
-  //       console.log("a");
-  //       Busser.count({location: "UCLA", sentiment: i}, function(err, n) {
-  //         if (err) return console.error(err);
-  //         if (n === 0) return;
-          
-  //         Busser.count({location: "UCLA", sentiment: i, went: 1}, function(err, n_success) {
-  //           if (err) return console.error(err);
-            
-  //           var p = n_success / n;
-  //           console.log(i + " p " + p);
-  //           mean_sum += n * p;
-  //           console.log(i + " 1");
-  //           variance_sum += n * p * (1 - p);
-  //           console.log(i + " 2");
-  //         });
-  //         console.log(i + " 3");
-          
-  //       })
-  //     }
-  //   },
+    // When call stack is finished executing (or error)
+    if (err) return console.log(err);
+    console.log("done");
+    console.log(util.inspect(sen_total));
+    console.log(util.inspect(sen_went));
     
-  //   function() {
-  //     // Use async to make sure this runs after db calls
-  //     // Combined normal distribution
-  //     console.log("mean_sum");
-      
-  //     busserDist.mean(mean_sum);
-  //     busserDist.variance(variance_sum);
-  //   }
+    // Calculate normal distribution parameters
+    var mean_sum = 0;
+    var variance_sum = 0;
+    // For each sentiment
+    [1, 2, 3, 4 , 5].forEach(function(sen) {
+      var p_sen = sen_went[sen] / sen_total[sen];
+      mean_sum += sen_total[sen] * p_sen; // binomial -> normal approximation: mean = np
+      variance_sum += sen_total[sen] * p_sen * (1 - p_sen); // binomial -> normal approximation: variance = np(1-p)
+    });
+    console.log("mean_sum: " + mean_sum + ", variance_sum: " + variance_sum);
     
-  // ]); // ! async
+    // Generate normal distribution and render graph page
+    var busserDist = createNormalDist()
+      .mean(mean_sum)
+      .variance(variance_sum);
+    // TODO: continuity correction
+    
+    var cdf = busserDist.cdf();
+    var n_total = 0;
+    sen_total.forEach(function(sen) { n_total += sen; });
+    var cdf_plot = { x: [], y: [], type: "scatter" };
+    for (var i = 0; i < n_total + 1; i++) {
+      cdf_plot.x[i] = i;
+      cdf_plot.y[i] = cdf(i);
+    }
+    console.log(util.inspect(cdf_plot));
+    
+    res.render("graph", {cdf_plot: JSON.stringify(cdf_plot)});
+  });
+
 });
 
 app.get("/form", function(req, res){
