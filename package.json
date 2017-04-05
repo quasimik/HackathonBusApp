@@ -1,7 +1,7 @@
 {
   "name": "busapp",
   "version": "1.0.0",
-  "description": "improve hackthon bus provision",
+  "description": "improve hackathon transport provision",
   "repository": {
     "type": "git",
     "url": "https://github.com/quasimik/BusBoss.git"
